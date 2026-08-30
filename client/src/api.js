@@ -1,8 +1,12 @@
-const BASE = '/api';
+const BASE = `${import.meta.env.VITE_API_BASE_URL || ''}/api`;
+const APP_KEY = import.meta.env.VITE_APP_ACCESS_KEY || '';
 
 async function request(path, options = {}) {
   const res = await fetch(`${BASE}${path}`, {
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      ...(APP_KEY ? { 'x-app-key': APP_KEY } : {}),
+    },
     ...options,
   });
   if (!res.ok) {
